@@ -2,6 +2,5 @@
 SELECT a.id
 FROM Weather as a
 Join Weather as b
--- on a.id=b.id
-where datediff(a.recordDate,b.recordDate)=1
-and a.temperature>b.temperature;
+on datediff(a.recordDate,b.recordDate)=1
+where a.temperature>b.temperature;
