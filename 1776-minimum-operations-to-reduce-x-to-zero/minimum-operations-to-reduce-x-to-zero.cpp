@@ -7,6 +7,9 @@ public:
         for(auto& it:nums) total+=it;
         int target=total-x;
 
+        if(target<0) return -1;
+        if(target==0) return n;
+
         int l=0;
         int curr=0;
         int res=-1;
@@ -14,7 +17,7 @@ public:
         for(int r=0;r<n;r++){
             curr=curr+nums[r];
 
-            while(curr>target && l<=r){
+            while(curr>target){
                 curr=curr-nums[l];
                 l++;
             }
