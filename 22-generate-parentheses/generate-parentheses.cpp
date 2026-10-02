@@ -1,40 +1,48 @@
 class Solution {
 public:
-    set<string> res;
 
-    bool isValid(string s){
-        stack<int> st;
-        if(s[0]==')') return false;
-        
-        for(auto& it:s){
-            if(!st.empty() && it==')'){
-                if(st.top()==it) return false;
-                else st.pop();
-            }
-            else st.push(it);
+    // void solvee(string s,int n,int open,int close,vector<string>& ans){
+    //     if(open==n && close==n){
+    //         ans.push_back(s);
+    //         return ;
+    //     }
+
+    //     if(open<n) solvee(s+"(",n,open+1,close,ans);
+    //     if(close<open) solvee(s+")",n,open,close,ans);
+    // }
+
+    // vector<string> generateParenthesis(int n) {
+    //     vector<string> ans;
+    //     solvee("",n,0,0,ans);
+    //     return ans;
+    // }
+
+    void solve(int n, int open, int close, string current, vector<string>& ans) {
+
+        // agar n pairs complete ho gaye
+        if (open == n && close == n) {
+            ans.push_back(current);
+            return;
         }
-        if(st.empty()) return true;
-        return false;
-    }
 
-    void solve(string curr,int n){
-        if(curr.size()==2*n){
-            if(isValid(curr)) res.insert(curr);
-            return ;
+        // opening bracket laga sakte hain
+        if (open < n) {
+            solve(n, open + 1, close, current + "(", ans);
         }
 
-        curr.push_back('(');
-        solve(curr,n);
-        curr.pop_back();
-        curr.push_back(')');
-        solve(curr,n);
-        curr.pop_back();
+        // closing bracket tabhi laga sakte hain
+        // jab opening brackets zyada hain
+        if (close < open) {
+            solve(n, open, close + 1, current + ")", ans);
+        }
     }
 
     vector<string> generateParenthesis(int n) {
-        solve("",n);
+
         vector<string> ans;
-        for(auto& it:res) ans.push_back(it);
+
+        solve(n, 0, 0, "", ans);
+
         return ans;
     }
 };
