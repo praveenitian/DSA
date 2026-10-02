@@ -22,11 +22,16 @@ public:
     vector<int> eventualSafeNodes(vector<vector<int>>& adj) {
         int n=adj.size();
         vector<int> res;
+        vector<int> vis(n,0);
 
         for(int i=0;i<n;i++){
-            if(isCycle(adj,i,n)==false) res.push_back(i);
+            // if(isCycle(adj,i,n)==false) res.push_back(i);
+            if(!vis[i]) dfs(adj,i,vis);
         }
-        // sort(res.begin(),res.end());
+        
+        for(int i=0;i<n;i++){
+            if(vis[i]==2) res.push_back(i);
+        }
         return res;
     }   
 };
