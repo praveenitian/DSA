@@ -21,7 +21,20 @@ public:
         int n=pairs.size();
 
         sort(pairs.begin(),pairs.end());
-        memset(dp,-1,sizeof(dp));
-        return solve(pairs,0,-1);
+        // memset(dp,-1,sizeof(dp));
+        // return solve(pairs,0,-1);
+
+        vector<int> t(n,1);
+        int res=1;
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<i;j++){
+                if(pairs[i][0]>pairs[j][1]){
+                    t[i]=max(t[i],1+t[j]);
+                    res=max(res,t[i]);
+                }
+            }
+        }
+        return res;
     }
 };
