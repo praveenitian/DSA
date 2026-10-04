@@ -21,6 +21,18 @@ public:
         n=nums.size();
         memset(dp,-1,sizeof(dp));
 
-        return solve(nums,0,-1);
+        // return solve(nums,0,-1);
+        vector<int> t(n,1);
+        int res=1;
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<i;j++){
+                if(nums[i]>nums[j]){
+                    t[i]=max(1+t[j],t[i]);
+                    res=max(res,t[i]);
+                }
+            }
+        }
+        return res;
     }
 };
