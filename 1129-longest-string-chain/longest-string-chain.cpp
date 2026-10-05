@@ -25,12 +25,19 @@ public:
         return dp[i][prev+1]=max(take,skip);
     }
 
+    static bool myfun(string &s1,string &s2){
+            return s1.size()<s2.size();
+        }
+
     int longestStrChain(vector<string>& words) {
         int n=words.size();
 
-        sort(words.begin(),words.end(),[](string s1,string s2){
-            return s1.size()<s2.size();
-        });
+    
+
+        // sort(words.begin(),words.end(),[](string s1,string s2){
+        //     return s1.size()<s2.size();
+        // });
+        sort(words.begin(),words.end(),myfun);
 
         memset(dp,-1,sizeof(dp));
 
