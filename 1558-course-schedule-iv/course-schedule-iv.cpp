@@ -1,39 +1,49 @@
 class Solution {
 public:
-    vector<bool> checkIfPrerequisite(int n, vector<vector<int>>& pre, vector<vector<int>>& q) {
+    vector<bool> checkIfPrerequisite(int numCourses, vector<vector<int>>& prerequisites, vector<vector<int>>& queries) {
+        vector<vector<int>> adj(numCourses);
+        vector<int> indegree(numCourses, 0);
         
-        vector<vector<int>> grid(n,vector<int>(n,1e9));
-
-        for(auto& it:pre){
-            int i=it[0];
-            int j=it[1];
-            int val=1;
-
-            grid[i][j]=val;
+        for(auto& pre : prerequisites) {
+            adj[pre[0]].push_back(pre[1]);
+            indegree[pre[1]]++;
         }
-
-        for(int i=0;i<n;i++){
-            for(int j=0;j<n;j++){
-                if(i==j) grid[i][j]=0;
-            }
+        
+        queue<int> q;
+        for(int i = 0; i < numCourses; i++) {
+            if(indegree[i] == 0) q.push(i);
         }
-
-        for(int via=0;via<n;via++){
-            for(int i=0;i<n;i++){
-                for(int j=0;j<n;j++){
-                    grid[i][j]=min(grid[i][j],grid[i][via]+grid[via][j]);
+        
+        // isPrereq[i][j] = true agar 'i' is a prerequisite of 'j'
+        vector<vector<bool>> isPrereq(numCourses, vector<bool>(numCourses, false));
+        
+        // Kahn's Algorithm
+        while(!q.empty()) {
+            int u = q.front();
+            q.pop();
+            
+            for(int v : adj[u]) {
+                // Direct prerequisite
+                isPrereq[u][v] = true; 
+                
+                // Indirect prerequisite: Jo bhi 'u' ke prerequisites the, wo 'v' ke bhi honge
+                for(int i = 0; i < numCourses; i++) {
+                    if(isPrereq[i][u]) {
+                        isPrereq[i][v] = true;
+                    }
+                }
+                
+                if(--indegree[v] == 0) {
+                    q.push(v);
                 }
             }
         }
-
-        vector<bool> ans(q.size(),false);
-
-        for(int i=0;i<q.size();i++){
-            int a=q[i][0];
-            int b=q[i][1];
-
-            if(grid[a][b]!=1e9) ans[i]=true;
+        
+        vector<bool> ans;
+        for(auto& query : queries) {
+            ans.push_back(isPrereq[query[0]][query[1]]);
         }
+        
         return ans;
     }
 };
